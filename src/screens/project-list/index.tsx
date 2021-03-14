@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { SearchPanel } from "./search-panel.jsx";
-import { TableList } from "./table-list.jsx";
+import { SearchPanel } from "./search-panel";
+import { TableList } from "./table-list";
 import qs from "qs";
 import { clearParam, useMount, useDebounce } from "./util";
 const apiUrl = process.env.REACT_APP_API_URL;

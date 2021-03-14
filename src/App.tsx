@@ -1,5 +1,5 @@
 import React from "react";
-import { ProjectList } from "./screens/project-list/index.jsx";
+import { ProjectList } from "./screens/project-list/index";
 import "./App.css";
 
 function App() {
