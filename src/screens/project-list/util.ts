@@ -31,3 +31,19 @@ export const useDebounce = <V>(param: V, time?: number) => {
   }, [param, time]);
   return debounceValue;
 };
+
+export const useArray = <V>(persons: V[]) => {
+  const [personList, setPersonList] = useState(persons);
+  const add = (value: V) => {
+    setPersonList([...personList, value]);
+  };
+  const clear = () => {
+    setPersonList([]);
+  };
+  const removeIndex = (index: number) => {
+    const list = [...personList];
+    list.splice(index, 1);
+    setPersonList(list);
+  };
+  return { value: personList, clear, removeIndex, add };
+};
