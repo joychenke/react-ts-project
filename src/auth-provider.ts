@@ -18,7 +18,7 @@ export const login = (data: { username: string; password: string }) => {
     },
   }).then(async (response: Response) => {
     if (response.ok) {
-      handleUserResponse(await response.json());
+      return handleUserResponse(await response.json());
     }
   });
 };
@@ -32,7 +32,7 @@ export const register = (data: { username: string; password: string }) => {
     },
   }).then(async (response: Response) => {
     if (response.ok) {
-      handleUserResponse(await response.json());
+      return handleUserResponse(await response.json());
     }
   });
 };
