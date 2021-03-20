@@ -13,6 +13,7 @@ export const LoginScreen = () => {
       }
     });
   };
+
   const handleSumbit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const username = (event.currentTarget.elements[0] as HTMLFormElement).value;
