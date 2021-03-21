@@ -14,8 +14,8 @@ export const login = (data: { username: string; password: string }) => {
     method: "POST",
     headers: {
       "Content-type": "application/json",
-      body: JSON.stringify(data),
     },
+    body: JSON.stringify(data),
   }).then(async (response: Response) => {
     // else语句保证了login方法返回的永远是 Promise
     if (response.ok) {
@@ -31,8 +31,8 @@ export const register = (data: { username: string; password: string }) => {
     method: "POST",
     headers: {
       "Content-type": "application/json",
-      body: JSON.stringify(data),
     },
+    body: JSON.stringify(data),
   }).then(async (response: Response) => {
     if (response.ok) {
       return handleUserResponse(await response.json());
