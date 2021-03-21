@@ -1,15 +1,15 @@
+import { AuthenticatedApp } from "authenticated-app";
+import { useAuth } from "context/auth-context";
 import React from "react";
-// import { ProjectList } from "./screens/project-list/index";
-// import { TsReactTest } from "./try-use-array";
-import { LoginScreen } from "./screens/login/index";
+import { UnauthenticatedApp } from "unauthenticated-app";
 import "./App.css";
 
+// 根据是否有user属性，来判断展示登录页面还是注册页面
 function App() {
+  const { user } = useAuth();
   return (
     <div className="App">
-      {/* <TsReactTest /> */}
-      {/* <ProjectList></ProjectList> */}
-      <LoginScreen></LoginScreen>
+      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </div>
   );
 }
