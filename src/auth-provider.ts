@@ -10,21 +10,24 @@ export const handleUserResponse = ({ user }: { user: User }) => {
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const login = (data: { username: string; password: string }) => {
-  fetch(`${apiUrl}/login`, {
+  return fetch(`${apiUrl}/login`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
       body: JSON.stringify(data),
     },
   }).then(async (response: Response) => {
+    // else语句保证了login方法返回的永远是 Promise
     if (response.ok) {
       return handleUserResponse(await response.json());
+    } else {
+      return Promise.reject(data);
     }
   });
 };
 
 export const register = (data: { username: string; password: string }) => {
-  fetch(`${apiUrl}/register`, {
+  return fetch(`${apiUrl}/register`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -33,8 +36,12 @@ export const register = (data: { username: string; password: string }) => {
   }).then(async (response: Response) => {
     if (response.ok) {
       return handleUserResponse(await response.json());
+    } else {
+      return Promise.reject(data);
     }
   });
 };
 
-export const logout = () => window.localStorage.removeItem(localStorageKey);
+// 加 async 是为了 logout 的返回值是 Promise 类型
+export const logout = async () =>
+  window.localStorage.removeItem(localStorageKey);
