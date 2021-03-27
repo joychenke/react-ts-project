@@ -2,11 +2,23 @@
 import * as auth from "auth-provider";
 import { default as React, ReactNode, useState } from "react";
 import { User } from "screens/project-list/search-panel";
+import { useMount } from "screens/project-list/util";
+import { http } from "utils/http";
 
 interface AuthForm {
   username: string;
   password: string;
 }
+
+const bootstrapUser = async () => {
+  let user = null;
+  const token = auth.getToken();
+  if (token) {
+    let data = await http("me", { token });
+    user = data.user;
+  }
+  return user;
+};
 
 // createContext 的传参要定义泛型，否则 value={{user, login, register, logout}} 会报错
 const AuthContext = React.createContext<
@@ -27,6 +39,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
   const logout = () => auth.logout().then(() => setUser(null));
+
+  // 整个App加载的时候，去获取用户数据
+  useMount(() => {
+    bootstrapUser().then(setUser);
+  });
   return (
     <AuthContext.Provider
       children={children}
