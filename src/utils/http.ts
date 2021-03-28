@@ -45,12 +45,19 @@ export const http = async (
     }
   });
 };
-
+// JS中typeof是在runtime时运行
 // 函数要使用其他hook，它本身也是hook
 export const useHttp = () => {
   const { user } = useAuth();
   // 传参和http的传参相同
+  // ts中的typeof是在静态环境时运行
+  // typeof http :  把变量http的类型提取出来
+  // Parameters<typeof http>：给Parameters传入函数型，读取这个函数型的参数型。
   return (...[endpoint, config]: Parameters<typeof http>) => {
     return http(endpoint, { ...config, token: user?.token });
   };
 };
+
+// utility type的用法：用泛型给它传入一个其他类型，然后用utility type对这份类型进行某种操作。Parameters就是一种utility type
+
+// Parameters，Partial 和 Omit 是最常用的三种 utility type

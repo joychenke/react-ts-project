@@ -10,6 +10,10 @@ interface AuthForm {
   password: string;
 }
 
+// 用type定义类型别名
+// type authForm = {username: string, password: string}
+// 类型别名和interface一般等价使用，但是 在或操作符、utility type时，只能用类型别名实现
+
 const bootstrapUser = async () => {
   let user = null;
   const token = auth.getToken();
@@ -34,6 +38,7 @@ AuthContext.displayName = "AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // useState会查看initstate的类型,user会保持和initstate类型一致，因为user可以为User类型或null，因此useState的传参要定义泛型 <User | null>
+  // <User | null>, User |(或) null, 组成联合类型
   const [user, setUser] = useState<User | null>(null);
   // then方法里,setUser 等价于 (user) => setUser(user); 函数式编程的point free概念
   const login = (form: AuthForm) => auth.login(form).then(setUser);
