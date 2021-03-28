@@ -61,3 +61,17 @@ export const useHttp = () => {
 // utility type的用法：用泛型给它传入一个其他类型，然后用utility type对这份类型进行某种操作。Parameters就是一种utility type
 
 // Parameters，Partial 和 Omit 是最常用的三种 utility type
+
+type Person = {
+  name: string;
+  age: number;
+};
+
+// 给类型的每一项，都加上optional操作符，即： type Person = {name?:string, age?:number}
+const xiaomng: Partial<Person> = {};
+// 新类型，剔除掉某些属性
+const shenmiren: Omit<Person, "name"> = { age: 12 };
+type PersonKeys = keyof Person;
+// Pick在对象里挑选键值，组成一个新的类型
+type PersonOnlyName = Pick<Person, "name" | "age">;
+type Age = Exclude<PersonKeys, "name">;
