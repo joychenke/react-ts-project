@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { loadDevTools } from "jira-dev-tool";
+// 务必在dev-tool后面
+import "antd/dist/antd.less";
 import { AppProvider } from "context/index";
 
 loadDevTools(() => {
