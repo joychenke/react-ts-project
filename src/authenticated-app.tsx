@@ -7,7 +7,14 @@ export const AuthenticatedApp = () => {
   return (
     <Container>
       <Header>
-        <button onClick={logout}>登出</button>
+        <HeaderLeft>
+          <h3>logo</h3>
+          <h2>项目</h2>
+          <h2>用户</h2>
+        </HeaderLeft>
+        <HeaderRight>
+          <button onClick={logout}>登出</button>
+        </HeaderRight>
       </Header>
       <Nav>nav..</Nav>
       <Main>
@@ -32,7 +39,16 @@ const Container = styled.div`
 `;
 const Header = styled.header`
   grid-area: header;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;
+const HeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const HeaderRight = styled.div``;
 const Main = styled.main`
   grid-area: main;
 `;
