@@ -3,6 +3,7 @@ import { Row } from "components/lib";
 import { useAuth } from "context/auth-context";
 import { ProjectList } from "screens/project-list";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
+import { Dropdown, Menu } from "antd";
 
 /**
  * grid和flx应用的场景
@@ -15,7 +16,7 @@ import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
  */
 
 export const AuthenticatedApp = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   return (
     <Container>
       <Header between={true}>
@@ -25,7 +26,17 @@ export const AuthenticatedApp = () => {
           <h2>用户</h2>
         </HeaderLeft>
         <HeaderRight>
-          <button onClick={logout}>登出</button>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key={"logout"}>
+                  <a onClick={logout}>登出</a>
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <a onClick={(e) => e.preventDefault()}>Hi, {user?.name}</a>
+          </Dropdown>
         </HeaderRight>
       </Header>
       <Main>
@@ -42,7 +53,9 @@ const Container = styled.div`
 // 有两种方式，一种通过Header传参between，一种通过将样式写在Header的定义中
 const Header = styled(Row)`
   /* justify-content: space-between; */
-  padding: 1.5rem;
+  padding: 3.2rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  z-index: 1;
 `;
 const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
