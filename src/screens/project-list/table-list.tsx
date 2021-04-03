@@ -1,3 +1,4 @@
+import { Table } from "antd";
 import { User } from "./search-panel";
 interface List {
   id: number;
@@ -10,25 +11,28 @@ interface TableListProps {
   list: List[];
   users: User[];
 }
+// 将表格替换为antd组件形式
 export const TableList = ({ list, users }: TableListProps) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>名称</th>
-          <th>负责人</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map((data) => (
-          <tr key={data.id}>
-            <td>{data.name}</td>
-            <td>
-              {users.find((user) => user.id === data.personId)?.name || "未知"}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Table
+      dataSource={list}
+      columns={[
+        {
+          title: "名称",
+          dataIndex: "name",
+          sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
+          title: "负责人",
+          render(value, project) {
+            return (
+              users.find((user: User) => user.id === project.personId)?.name ||
+              "未知"
+            );
+          },
+        },
+      ]}
+      pagination={false}
+    ></Table>
   );
 };
