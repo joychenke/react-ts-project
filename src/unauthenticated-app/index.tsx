@@ -8,12 +8,12 @@ export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   return (
     <Container>
-      <Card>
+      <ShadowCard>
         {isRegister ? <RegisterScreen /> : <LoginScreen />}
         <button onClick={() => setIsRegister(!isRegister)}>
           切换到{isRegister ? "登录" : "注册"}
         </button>
-      </Card>
+      </ShadowCard>
     </Container>
   );
 };
@@ -25,4 +25,15 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+`;
+
+// 变量名首字母大写，需要包装的antd标签作为styled的传参
+const ShadowCard = styled(Card)`
+  width: 40rem;
+  min-height: 56rem;
+  padding: 3.2rem 4rem;
+  border-radius: 0.3rem;
+  box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
+  text-align: center;
 `;
