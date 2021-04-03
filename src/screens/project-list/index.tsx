@@ -3,6 +3,7 @@ import { SearchPanel } from "./search-panel";
 import { TableList } from "./table-list";
 import { clearParam, useMount, useDebounce } from "./util";
 import { useHttp } from "utils/http";
+import styled from "@emotion/styled";
 export const ProjectList = () => {
   const [param, setParam] = useState({
     name: "",
@@ -21,9 +22,13 @@ export const ProjectList = () => {
     client("users").then(setUsers);
   });
   return (
-    <div>
+    <Container>
       <SearchPanel param={param} users={users} setParam={setParam} />
       <TableList list={list} users={users} />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  padding: 3.2rem;
+`;
