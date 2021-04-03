@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Row } from "components/lib";
 import { useAuth } from "context/auth-context";
 import { ProjectList } from "screens/project-list";
 
@@ -16,9 +17,9 @@ export const AuthenticatedApp = () => {
   const { logout } = useAuth();
   return (
     <Container>
-      <Header>
-        <HeaderLeft>
-          <h3>logo</h3>
+      <Header between={true}>
+        <HeaderLeft gap={1}>
+          <h2>logo</h2>
           <h2>项目</h2>
           <h2>用户</h2>
         </HeaderLeft>
@@ -36,15 +37,11 @@ export const AuthenticatedApp = () => {
 const Container = styled.div`
   height: 100vh;
 `;
-const Header = styled.header`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+
+// 有两种方式，一种通过Header传参between，一种通过将样式写在Header的定义中
+const Header = styled(Row)`
+  /* justify-content: space-between; */
 `;
-const HeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-`;
+const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
 const Main = styled.main``;
