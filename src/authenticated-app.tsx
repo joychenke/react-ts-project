@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Row } from "components/lib";
 import { useAuth } from "context/auth-context";
 import { ProjectList } from "screens/project-list";
+import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 
 /**
  * grid和flx应用的场景
@@ -19,7 +20,7 @@ export const AuthenticatedApp = () => {
     <Container>
       <Header between={true}>
         <HeaderLeft gap={1}>
-          <h2>logo</h2>
+          <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
           <h2>项目</h2>
           <h2>用户</h2>
         </HeaderLeft>
@@ -41,6 +42,7 @@ const Container = styled.div`
 // 有两种方式，一种通过Header传参between，一种通过将样式写在Header的定义中
 const Header = styled(Row)`
   /* justify-content: space-between; */
+  padding: 1.5rem;
 `;
 const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
