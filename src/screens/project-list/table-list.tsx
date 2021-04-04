@@ -50,6 +50,7 @@ export const TableList = ({ list, users }: TableListProps) => {
         },
       ]}
       pagination={false}
+      rowKey={(record) => record.id}
     ></Table>
   );
 };
