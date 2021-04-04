@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-const isFalsy = (value: unknown) => (value === 0 ? false : !value);
+// null,undefined,空字符串都是没有意义的，删除
+const isVoid = (value: unknown) =>
+  value === null || value === undefined || value === "";
 /* 
 let b:{[key: string]: unknown}
 b = {name: 'cc'}
@@ -9,7 +11,7 @@ b = () => {} //报错
 export const clearParam = (obj: { [key: string]: unknown }) => {
   const result = { ...obj };
   Object.keys(obj).forEach((key) => {
-    if (isFalsy(obj[key])) {
+    if (isVoid(obj[key])) {
       delete result[key];
     }
   });
