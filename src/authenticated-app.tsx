@@ -6,7 +6,7 @@ import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
 
 /**
- * grid和flx应用的场景
+ * grid和flex应用的场景
  * 1，是一维布局还是二维布局
  * 一维的意思是，仅仅是一个方向(横或纵), 二维的意思是，两个方向都有(横和纵)。一般来说，一维布局用flex，二维布局用grid
  *  2，是从内容出发，还是从布局出发

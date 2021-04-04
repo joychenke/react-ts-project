@@ -30,6 +30,7 @@ const Title = styled.h2`
   color: rgb(94, 108, 132);
 `;
 
+// 将两个背景图，通过background相关属性一次设置好
 const Background = styled.div`
   position: absolute;
   width: 100%;

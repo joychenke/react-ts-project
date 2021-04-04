@@ -36,6 +36,7 @@ const AuthContext = React.createContext<
 >(undefined);
 AuthContext.displayName = "AuthContext";
 
+// 一层一层包裹，向上传递，AuthProvider -> AppProvider -> 顶层index.tsx，这样确保了页面在渲染时，就会执行此处AuthProvider方法体中定义的方法
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // useState会查看initstate的类型,user会保持和initstate类型一致，因为user可以为User类型或null，因此useState的传参要定义泛型 <User | null>
   // <User | null>, User |(或) null, 组成联合类型
@@ -57,10 +58,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// 其他组件要访问login等，直接通过调用useAuth()访问
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth必须在AuthProvider中使用");
   }
+  // 对象，包含四个属性：login,logout,user,register
   return context;
 };

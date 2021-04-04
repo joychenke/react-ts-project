@@ -3,6 +3,9 @@ import { User } from "screens/project-list/search-panel";
 // 如果使用的是firebase这种三方auth服务，不需要开发这个文件
 const localStorageKey = "__auth_provider_token__";
 export const getToken = () => window.localStorage.getItem(localStorageKey);
+
+// 注册和登录时，更新缓存中的token，并返回用户信息
+// 入参是对象{user}, 类型是{ user: User }，它里面的user属性时User类型
 export const handleUserResponse = ({ user }: { user: User }) => {
   window.localStorage.setItem(localStorageKey, user.token || "");
   return user;
