@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { User } from "./search-panel";
 interface List {
@@ -8,15 +8,16 @@ interface List {
   organization: string;
   created: number;
 }
-interface TableListProps {
-  list: List[];
+// 用添加isLoading的方式加loading，这个extends是最重要的
+interface TableListProps extends TableProps<List> {
   users: User[];
 }
 // 将表格替换为antd组件形式
-export const TableList = ({ list, users }: TableListProps) => {
+// 剩下的键值都放在props里, 如果用类型别名定义props的类型则如下PropsType：
+// type PropsType = Omit<TableListProps, 'users'>
+export const TableList = ({ users, ...props }: TableListProps) => {
   return (
     <Table
-      dataSource={list}
       columns={[
         {
           title: "名称",
@@ -51,6 +52,7 @@ export const TableList = ({ list, users }: TableListProps) => {
       ]}
       pagination={false}
       rowKey={(record) => record.id}
+      {...props}
     ></Table>
   );
 };
