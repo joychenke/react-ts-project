@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 const isFalsy = (value: unknown) => (value === 0 ? false : !value);
-export const clearParam = (obj: object) => {
+/* 
+let b:{[key: string]: unknown}
+b = {name: 'cc'}
+b = () => {} //报错 
+*/
+// obj是键值对，键是string类型key，值unknown
+export const clearParam = (obj: { [key: string]: unknown }) => {
   const result = { ...obj };
   Object.keys(obj).forEach((key) => {
-    // @ts-ignore
     if (isFalsy(obj[key])) {
-      // @ts-ignore
       delete result[key];
     }
   });
