@@ -21,6 +21,9 @@ export const clearParam = (obj: { [key: string]: unknown }) => {
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
+    // 依赖项里加callback，会造成无限循环，这和useCallback和useMemo有关
+    // eslint的报错信息不一定对
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 

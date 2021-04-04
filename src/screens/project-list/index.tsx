@@ -16,6 +16,7 @@ export const ProjectList = () => {
   // param改变的时候，获取项目列表，接口代码
   useEffect(() => {
     client("projects", { data: clearParam(debouncedParam) }).then(setList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedParam]);
 
   useMount(() => {
