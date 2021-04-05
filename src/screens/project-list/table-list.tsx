@@ -4,7 +4,7 @@ import { User } from "./search-panel";
 export interface List {
   id: number;
   name: string;
-  personId: number;
+  personId: number | string;
   organization: string;
   created: number;
 }
