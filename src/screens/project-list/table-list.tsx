@@ -1,7 +1,7 @@
 import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { User } from "./search-panel";
-interface List {
+export interface List {
   id: number;
   name: string;
   personId: number;

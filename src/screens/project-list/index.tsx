@@ -1,35 +1,24 @@
 import { useState, useEffect } from "react";
 import { SearchPanel } from "./search-panel";
-import { TableList } from "./table-list";
+import { List, TableList } from "./table-list";
 import { clearParam, useMount, useDebounce } from "./util";
 import { useHttp } from "utils/http";
 import styled from "@emotion/styled";
 import { Typography } from "antd";
+import { useAsync } from "utils/use-async";
 export const ProjectList = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  // error 用了泛型定义error的类型
-  const [error, setError] = useState<null | Error>(null);
   const [param, setParam] = useState({
     name: "",
     personId: "",
   });
   const [users, setUsers] = useState([]);
-  const [list, setList] = useState([]);
   const debouncedParam = useDebounce(param, 500);
   const client = useHttp();
+  // <List[]>: 定义了use-async.ts中的泛型<D>是List数组类型，即List[]
+  const { isLoading, error, data: list, run } = useAsync<List[]>();
   // param改变的时候，获取项目列表，接口代码
   useEffect(() => {
-    setIsLoading(true);
-    client("projects", { data: clearParam(debouncedParam) })
-      .then((data) => {
-        setList(data);
-        setError(null);
-      })
-      .catch((error) => {
-        setList([]);
-        setError(error);
-      })
-      .finally(() => setIsLoading(false));
+    run(client("projects", { data: clearParam(debouncedParam) }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedParam]);
 
@@ -43,7 +32,8 @@ export const ProjectList = () => {
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
       {/* dataSource,loading, users，透传给了TableList组件，除了users，其他两个都被TableList组件以props属性接收 */}
-      <TableList dataSource={list} users={users} loading={isLoading} />
+      {/* 从useAsync的定义中可知，list有可能是null，因此是 list || [] */}
+      <TableList dataSource={list || []} users={users} loading={isLoading} />
     </Container>
   );
 };
