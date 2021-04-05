@@ -10,7 +10,7 @@ const defaultInitialState: State<null> = {
   data: null,
   error: null,
 };
-
+// 泛型<D>的入口，或者在调用useAsync时传入，或者在调用State时传入
 export const useAsync = <D>(initialState?: State<D>) => {
   // state的类型：<State<D>>
   const [state, setState] = useState<State<D>>({
