@@ -1,10 +1,23 @@
 import { Form, Input } from "antd";
 import { useAuth } from "context/auth-context";
 import { LongButton } from "./index";
-export const RegisterScreen = () => {
+// 调用RegisterScreen时，用到了onError, onError有个传参error，返回值是void类型
+export const RegisterScreen = ({
+  onError,
+}: {
+  onError: (error: Error) => void;
+}) => {
   const { register } = useAuth();
-  const handleSumbit = (values: { username: string; password: string }) => {
-    register(values);
+  const handleSumbit = async (values: {
+    username: string;
+    password: string;
+  }) => {
+    try {
+      await register(values);
+    } catch (error) {
+      // 调用接收的onError参数，其实也就是调用了父组件的setError
+      onError(error);
+    }
   };
   return (
     <Form onFinish={handleSumbit}>

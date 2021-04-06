@@ -1,10 +1,21 @@
 import { useAuth } from "context/auth-context";
 import { Form, Input } from "antd";
 import { LongButton } from "./index";
-export const LoginScreen = () => {
+export const LoginScreen = ({
+  onError,
+}: {
+  onError: (error: Error) => void;
+}) => {
   const { login } = useAuth();
-  const handleSumbit = (values: { username: string; password: string }) => {
-    login(values);
+  const handleSumbit = async (values: {
+    username: string;
+    password: string;
+  }) => {
+    try {
+      await login(values);
+    } catch (error) {
+      onError(error);
+    }
   };
   return (
     <Form onFinish={handleSumbit}>
