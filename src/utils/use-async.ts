@@ -10,8 +10,18 @@ const defaultInitialState: State<null> = {
   data: null,
   error: null,
 };
+
+// 某个变量的类型，就可以用 typeof
+const defaultConfig = {
+  throwOnError: false,
+};
+
 // 泛型<D>的入口，或者在调用useAsync时传入，或者在调用State时传入
-export const useAsync = <D>(initialState?: State<D>) => {
+export const useAsync = <D>(
+  initialState?: State<D>,
+  initialConfig?: typeof defaultConfig
+) => {
+  const config = { ...defaultConfig, ...initialConfig };
   // state的类型：<State<D>>
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
@@ -49,7 +59,11 @@ export const useAsync = <D>(initialState?: State<D>) => {
       .catch((error) => {
         // catch会消化异常，如果不主动抛出异常，外面是接收不到的
         setError(error);
-        return Promise.reject(error);
+        if (config.throwOnError) {
+          return Promise.reject(error);
+        } else {
+          return error;
+        }
       });
   };
   return {

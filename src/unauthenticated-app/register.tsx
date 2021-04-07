@@ -1,5 +1,6 @@
 import { Form, Input } from "antd";
 import { useAuth } from "context/auth-context";
+import { useAsync } from "utils/use-async";
 import { LongButton } from "./index";
 // 调用RegisterScreen时，用到了onError, onError有个传参error，返回值是void类型
 export const RegisterScreen = ({
@@ -8,6 +9,7 @@ export const RegisterScreen = ({
   onError: (error: Error) => void;
 }) => {
   const { register } = useAuth();
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
   // cpassword不参与接口调用
   const handleSumbit = async ({
     cpassword,
@@ -22,7 +24,7 @@ export const RegisterScreen = ({
       return;
     }
     try {
-      await register(values);
+      await run(register(values));
     } catch (error) {
       // 调用接收的onError参数，其实也就是调用了父组件的setError
       onError(error);
@@ -53,7 +55,7 @@ export const RegisterScreen = ({
         ></Input>
       </Form.Item>
       <Form.Item>
-        <LongButton htmlType={"submit"} type={"primary"}>
+        <LongButton loading={isLoading} htmlType={"submit"} type={"primary"}>
           注册
         </LongButton>
       </Form.Item>
