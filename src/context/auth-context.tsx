@@ -1,9 +1,11 @@
 // 当一个组件中有多个export的项，可以导出为*
 import * as auth from "auth-provider";
-import { default as React, ReactNode, useState } from "react";
+import { FullPageErrorFallback, FullPageLoading } from "components/lib";
+import { default as React, ReactNode } from "react";
 import { User } from "screens/project-list/search-panel";
 import { useMount } from "screens/project-list/util";
 import { http } from "utils/http";
+import { useAsync } from "utils/use-async";
 
 interface AuthForm {
   username: string;
@@ -38,9 +40,15 @@ AuthContext.displayName = "AuthContext";
 
 // 一层一层包裹，向上传递，AuthProvider -> AppProvider -> 顶层index.tsx，这样确保了页面在渲染时，就会执行此处AuthProvider方法体中定义的方法
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // useState会查看initstate的类型,user会保持和initstate类型一致，因为user可以为User类型或null，因此useState的传参要定义泛型 <User | null>
-  // <User | null>, User |(或) null, 组成联合类型
-  const [user, setUser] = useState<User | null>(null);
+  const {
+    data: user,
+    error,
+    isLoading,
+    isIdle,
+    isError,
+    run,
+    setData: setUser,
+  } = useAsync<User | null>();
   // then方法里,setUser 等价于 (user) => setUser(user); 函数式编程的point free概念
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
@@ -48,8 +56,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // 整个App加载的时候，去获取用户数据
   useMount(() => {
-    bootstrapUser().then(setUser);
+    run(bootstrapUser());
   });
+
+  if (isIdle || isLoading) {
+    return <FullPageLoading></FullPageLoading>;
+  }
+
+  if (isError) {
+    return <FullPageErrorFallback error={error} />;
+  }
+
   return (
     <AuthContext.Provider
       children={children}
