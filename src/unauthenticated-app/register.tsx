@@ -23,6 +23,7 @@ export const RegisterScreen = ({
       onError(new Error("两次输入密码请保持一致"));
       return;
     }
+    // 同步和异步混用的时候，用try catch
     try {
       await run(register(values));
     } catch (error) {
