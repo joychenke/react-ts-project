@@ -6,17 +6,15 @@ import { RegisterScreen } from "./register";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
-import { Helmet } from "react-helmet";
+import { useDocumentTitle } from "utils";
 
 export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   // error变量是子组件改变父组件中变量的例子。onError属性绑定了setError方法传到了子组件
   const [error, setError] = useState<Error | null>(null);
+  useDocumentTitle("请注册或登录以继续");
   return (
     <Container>
-      <Helmet>
-        <title>请登录或注册以继续使用</title>
-      </Helmet>
       <Header />
       <Background />
       <ShadowCard>
