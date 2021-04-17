@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useProject } from "utils/project";
 import { useUser } from "utils/user";
+import { Helmet } from "react-helmet";
 export const ProjectList = () => {
   const [param, setParam] = useState({
     name: "",
@@ -16,6 +17,9 @@ export const ProjectList = () => {
   const { data: users } = useUser();
   return (
     <Container>
+      <Helmet>
+        <title>项目列表</title>
+      </Helmet>
       <SearchPanel param={param} users={users || []} setParam={setParam} />
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
