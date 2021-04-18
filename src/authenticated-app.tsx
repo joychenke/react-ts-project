@@ -4,6 +4,9 @@ import { useAuth } from "context/auth-context";
 import { ProjectList } from "screens/project-list";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
+import { Navigate, Route, Routes } from "react-router";
+import { BrowserRouter as Router } from "react-router-dom";
+import { ProjectScreen } from "screens/project";
 
 /**
  * grid和flex应用的场景
@@ -20,7 +23,16 @@ export const AuthenticatedApp = () => {
     <Container>
       <PageHeader />
       <Main>
-        <ProjectList />
+        <Router>
+          {/* 在react-router 6中路由都用Routes包裹起来 */}
+          <Routes>
+            <Route path={"/projects"} element={<ProjectList />}></Route>
+            <Route
+              path={"/projects/:projectId"}
+              element={<ProjectScreen />}
+            ></Route>
+          </Routes>
+        </Router>
       </Main>
     </Container>
   );
