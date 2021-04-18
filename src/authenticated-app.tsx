@@ -27,10 +27,13 @@ export const AuthenticatedApp = () => {
           {/* 在react-router 6中路由都用Routes包裹起来 */}
           <Routes>
             <Route path={"/projects"} element={<ProjectList />}></Route>
+            {/* 不加 * 的话，projects/1/kanban 将不会渲染 */}
             <Route
-              path={"/projects/:projectId"}
+              path={"/projects/:projectId/*"}
               element={<ProjectScreen />}
             ></Route>
+            {/* 默认跳转到 /projects */}
+            <Navigate to={"/projects"}></Navigate>
           </Routes>
         </Router>
       </Main>
