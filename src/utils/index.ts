@@ -10,6 +10,7 @@ export const useDocumentTitle = (
     document.title = title;
   }, [title]);
 
+  // 组件销毁时执行下面方法
   useEffect(() => {
     return () => {
       if (!keepOnUnmount) {
