@@ -20,3 +20,6 @@ export const useDocumentTitle = (
     };
   }, [keepOnUnmount, oldTitle]);
 };
+
+// 重置路由状态 + 刷新整个页面
+export const resetRoute = () => (window.location.href = window.location.origin);
