@@ -35,8 +35,8 @@ export const useDebounce = <V>(param: V, time?: number) => {
     let timeOut = setTimeout(() => {
       setDebouncesValue(param);
     }, time);
-    // 每次执行 useEffect，会先去执行return后面返回的函数
     return () => clearTimeout(timeOut);
+    // param 是非状态的对象，每次传入，都会触发useEffect函数执行
   }, [param, time]);
   return debounceValue;
 };
