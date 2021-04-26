@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
+import { clearParam } from "screens/project-list/util";
 
 // 返回页面url中，指定键的参数值
 // 泛型：不指定类型；根据传入的值，来动态判断习惯
@@ -17,7 +18,17 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [searchParams]
     ),
-    setSearchParams,
+    // params里面的参数
+    (params: Partial<{ [key in K]: unknown }>) => {
+      // Object.fromEntries(iterator)将iterator转化为对象
+      // 强制指定为URLSearchParamsInit，使调用 setSearchParams(o) 时，不报错
+      // Object.fromEntries(searchParams)： 将现在的url参数，转化为普通的对象
+      const o = clearParam({
+        ...Object.fromEntries(searchParams),
+        ...params,
+      }) as URLSearchParamsInit;
+      return setSearchParams(o);
+    },
   ] as const;
 };
 

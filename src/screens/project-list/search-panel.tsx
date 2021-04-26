@@ -15,6 +15,7 @@ interface SearchPanelProps {
   setParam: (param: SearchPanelProps["param"]) => void;
 }
 export const SearchPanel = ({ param, setParam, users }: SearchPanelProps) => {
+  console.log("users:", users);
   return (
     // emotion行内样式
     <Form css={{ marginBottom: "2rem" }} layout={"inline"}>
@@ -42,7 +43,7 @@ export const SearchPanel = ({ param, setParam, users }: SearchPanelProps) => {
         >
           <Select.Option value={""}>负责人</Select.Option>
           {users.map((user) => (
-            <Select.Option value={user.id} key={user.id}>
+            <Select.Option value={String(user.id)} key={user.id}>
               {user.name}
             </Select.Option>
           ))}

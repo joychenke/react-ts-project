@@ -9,12 +9,9 @@ import { useUser } from "utils/user";
 import { useDocumentTitle } from "utils";
 import { useUrlQueryParam } from "utils/url";
 export const ProjectList = () => {
-  const [, setParam] = useState({
-    name: "",
-    personId: "",
-  });
   // 基本类型，可以放到依赖里;组件状态，可以放到依赖里；非组件状态的对象，绝对不可以放到依赖里
-  const [param] = useUrlQueryParam(["name", "personId"]);
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+  console.log("param:", param);
   // 每次渲染时，都会重新创建了一个新对象；导致两次渲染传入useDebounce的对象不一样，导致了useDebounce一直在执行
   const debouncedParam = useDebounce(param, 500);
   const { isLoading, error, data: list } = useProject(debouncedParam);
@@ -43,7 +40,7 @@ export const ProjectList = () => {
 };
 
 // 只跟踪 ProjectList 组件
-ProjectList.whyDidYouRender = true;
+ProjectList.whyDidYouRender = false;
 /* // 上面的 ProjectList.whyDidYouRender = true 相当于下面的内容：
 class ProjectList extends React.Component<any, any>{
   static whyDidYouRender = true
