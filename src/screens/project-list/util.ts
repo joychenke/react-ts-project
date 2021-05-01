@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { useEffect, useState } from "react";
+import { useUrlQueryParam } from "utils/url";
 // null,undefined,空字符串都是没有意义的，删除
 const isVoid = (value: unknown) =>
   value === null || value === undefined || value === "";
@@ -55,4 +57,17 @@ export const useArray = <V>(persons: V[]) => {
     setPersonList(list);
   };
   return { value: personList, clear, removeIndex, add };
+};
+
+// 项目列表搜索参数
+export const useProjectsSearchParams = () => {
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+  return [
+    // 依然是解决无限循环、获取数据的问题
+    useMemo(
+      () => ({ ...param, personId: Number(param.personId) || undefined }),
+      [param]
+    ),
+    setParam,
+  ] as const;
 };
