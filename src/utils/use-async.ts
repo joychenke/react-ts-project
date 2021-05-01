@@ -28,6 +28,8 @@ export const useAsync = <D>(
     ...initialState,
   });
 
+  const [retry, setRetry] = useState(() => () => {});
+
   // data是D类型
   const setData = (data: D) =>
     setState({
@@ -45,11 +47,21 @@ export const useAsync = <D>(
 
   // run用来触发异步请求
   // Promise里包含的是D类型的数据
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { retry: () => Promise<D> }
+  ) => {
     // 没传或者不是promise数据
     if (!promise || !promise.then) {
       throw new Error("请输入 Promise类型的数据");
     }
+    setRetry(() => () => {
+      // run(promise)时，setRetry更新的函数是run(promise)返回的结果，即新的newPromise，而不是run的入参promise。其实页面时重新渲染的，setData(data)走了一遍
+      if (runConfig?.retry) {
+        // 要想第一次retry之后，可以继续刷新，runConfig必传
+        run(runConfig?.retry(), runConfig);
+      }
+    });
     setState({ ...state, stat: "loading" });
     return promise
       .then((data) => {
@@ -74,6 +86,8 @@ export const useAsync = <D>(
     run,
     setData,
     setError,
+    // 被调用时，重新跑一遍run，让state刷新一遍
+    retry,
     ...state,
   };
 };

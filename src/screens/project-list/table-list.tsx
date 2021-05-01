@@ -15,6 +15,7 @@ export interface List {
 // 用添加isLoading的方式加loading，这个extends是最重要的
 interface TableListProps extends TableProps<List> {
   users: User[];
+  refresh?: () => void;
 }
 // 将表格替换为antd组件形式
 // 剩下的键值都放在props里, 如果用类型别名定义props的类型则如下PropsType：
@@ -23,7 +24,8 @@ export const TableList = ({ users, ...props }: TableListProps) => {
   // useEditProject是react hook，只能在顶层调用，而mutate是纯函数，不受此规则限制
   const { mutate } = useEditProject();
   // 函数式编程，point free的写法
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const pinProject = (id: number) => (pin: boolean) =>
+    mutate({ id, pin }).then(props.refresh);
   return (
     <Table
       columns={[

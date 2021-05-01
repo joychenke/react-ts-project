@@ -7,10 +7,14 @@ import { useAsync } from "./use-async";
 // 获取列表信息的hook
 export const useProject = (param?: Partial<List>) => {
   const client = useHttp();
+  const fetchProjects = () =>
+    client("projects", { data: clearParam(param || {}) });
   // useAsync方法里的<D>是<List[]>
   const { run, ...result } = useAsync<List[]>();
   useEffect(() => {
-    run(client("projects", { data: clearParam(param || {}) }));
+    run(fetchProjects(), {
+      retry: fetchProjects,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]);
   return result;

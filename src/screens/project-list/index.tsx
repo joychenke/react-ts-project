@@ -10,7 +10,9 @@ export const ProjectList = () => {
   useDocumentTitle("项目列表", false);
   // 基本类型，可以放到依赖里;组件状态，可以放到依赖里；非组件状态的对象，绝对不可以放到依赖里
   const [param, setParam] = useProjectsSearchParams();
-  const { isLoading, error, data: list } = useProject(useDebounce(param, 500));
+  const { isLoading, error, data: list, retry } = useProject(
+    useDebounce(param, 500)
+  );
   const { data: users } = useUser();
 
   return (
@@ -23,6 +25,7 @@ export const ProjectList = () => {
       {/* dataSource,loading, users，透传给了TableList组件，除了users，其他两个都被TableList组件以props属性接收 */}
       {/* 从useAsync的定义中可知，list有可能是null，因此是 list || [] */}
       <TableList
+        refresh={retry}
         dataSource={list || []}
         users={users || []}
         loading={isLoading}
