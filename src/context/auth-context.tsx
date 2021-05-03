@@ -84,3 +84,14 @@ export const useAuth = () => {
   // 对象，包含四个属性：login,logout,user,register
   return context;
 };
+
+/* 
+使用 useContext 时，数据的传递过程：
+	1. 通过React.createContext(undefined) 初始化 AuthContext
+	2. <AuthContext.Provider>组件通过传入value属性，更新 AuthContext（新AuthContext里包含login，logout，user等信息）
+	3. <App>被包裹在 <AuthContext.Provider>
+	4. 编写自定义Hook  useAuth，通过useContext读取 新的 AuthContext，并返回出去
+	5. 在<App>的组件中，通过调用useAuth，读取 新的 AuthContext，比如：const { logout, user } = useAuth();
+	6. 使用解析出来的logout，user 等
+
+*/
