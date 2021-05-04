@@ -8,6 +8,9 @@ import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
+import { useState } from "react";
+import { ProjectModal } from "screens/project-list/project-modal";
+import { ProjectPopover } from "components/project-popover";
 
 /**
  * grid和flex应用的场景
@@ -20,10 +23,12 @@ import { resetRoute } from "utils";
  */
 
 export const AuthenticatedApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
   // 能够访问Container、PageHeader等变量的原因是：这些变量只是跟在return后面，被返回出去了；但是并没有被执行；container虽然是由const定义的，但是也有变量提升，只是不能马上使用
   return (
     <Container>
       <PageHeader />
+      {/* <Button onClick={() => setProjectModalOpen(true)}>打开modal</Button> */}
       <Main>
         <Router>
           {/* 在react-router 6中路由都用Routes包裹起来 */}
@@ -39,6 +44,10 @@ export const AuthenticatedApp = () => {
           </Routes>
         </Router>
       </Main>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      ></ProjectModal>
     </Container>
   );
 };
@@ -48,11 +57,11 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={1}>
-        <Button type={"link"} onClick={resetRoute}>
+        <Button style={{ padding: 0 }} type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </Button>
-        <h2>项目</h2>
-        <h2>用户</h2>
+        <ProjectPopover></ProjectPopover>
+        <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
         <User />
