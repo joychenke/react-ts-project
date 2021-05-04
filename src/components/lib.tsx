@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Spin, Typography } from "antd";
+import { Button, Spin, Typography } from "antd";
 import { DevTools } from "jira-dev-tool";
 // 将公共样式提取出来，放在公共组件Row中
 // props中可能包含的属性，都应该在泛型中定义
@@ -43,3 +43,7 @@ export const FullPageErrorFallback = ({ error }: { error: Error | null }) => (
     <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
   </FullPage>
 );
+
+export const ButtonNoPadding = styled(Button)`
+  padding: 0;
+`;

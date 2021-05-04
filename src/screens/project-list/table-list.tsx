@@ -1,9 +1,10 @@
-import { Table, TableProps } from "antd";
+import { Dropdown, Menu, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { User } from "./search-panel";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProject } from "utils/project";
+import { ButtonNoPadding } from "components/lib";
 export interface List {
   id: number;
   name: string;
@@ -16,6 +17,7 @@ export interface List {
 interface TableListProps extends TableProps<List> {
   users: User[];
   refresh?: () => void;
+  setProjectModalOpen: (isOpen: boolean) => void;
 }
 // 将表格替换为antd组件形式
 // 剩下的键值都放在props里, 如果用类型别名定义props的类型则如下PropsType：
@@ -70,6 +72,28 @@ export const TableList = ({ users, ...props }: TableListProps) => {
                   ? dayjs(project.created).format("YYYY-MM-DD HH:mm:ss")
                   : "--"}
               </span>
+            );
+          },
+        },
+        {
+          render(value, project) {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key={"edit"}>
+                      <ButtonNoPadding
+                        type={"link"}
+                        onClick={() => props.setProjectModalOpen(true)}
+                      >
+                        编辑
+                      </ButtonNoPadding>
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },

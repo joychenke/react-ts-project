@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
 import { useAuth } from "context/auth-context";
 import { ProjectList } from "screens/project-list";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
@@ -27,13 +27,18 @@ export const AuthenticatedApp = () => {
   // 能够访问Container、PageHeader等变量的原因是：这些变量只是跟在return后面，被返回出去了；但是并没有被执行；container虽然是由const定义的，但是也有变量提升，只是不能马上使用
   return (
     <Container>
-      <PageHeader />
+      <PageHeader setProjectModalOpen={setProjectModalOpen} />
       {/* <Button onClick={() => setProjectModalOpen(true)}>打开modal</Button> */}
       <Main>
         <Router>
           {/* 在react-router 6中路由都用Routes包裹起来 */}
           <Routes>
-            <Route path={"/projects"} element={<ProjectList />}></Route>
+            <Route
+              path={"/projects"}
+              element={
+                <ProjectList setProjectModalOpen={setProjectModalOpen} />
+              }
+            ></Route>
             {/* 不加 * 的话，projects/1/kanban 将不会渲染 */}
             <Route
               path={"/projects/:projectId/*"}
@@ -53,14 +58,18 @@ export const AuthenticatedApp = () => {
 };
 
 // 将header部分的内容抽离出来
-const PageHeader = () => {
+const PageHeader = (props: {
+  setProjectModalOpen: (isOpen: boolean) => void;
+}) => {
   return (
     <Header between={true}>
       <HeaderLeft gap={1}>
-        <Button style={{ padding: 0 }} type={"link"} onClick={resetRoute}>
+        <ButtonNoPadding type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
-        </Button>
-        <ProjectPopover></ProjectPopover>
+        </ButtonNoPadding>
+        <ProjectPopover
+          setProjectModalOpen={props.setProjectModalOpen}
+        ></ProjectPopover>
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
