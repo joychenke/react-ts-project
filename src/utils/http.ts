@@ -1,6 +1,7 @@
 import qs from "qs";
 import * as auth from "auth-provider";
 import { useAuth } from "context/auth-context";
+import { useCallback } from "react";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 // data 和 token属性不是RequestInit中的属性，要加到 RequestInit 中
@@ -53,9 +54,12 @@ export const useHttp = () => {
   // ts中的typeof是在静态环境时运行
   // typeof http :  把变量http的类型提取出来
   // Parameters<typeof http>：给Parameters传入函数型，读取这个函数型的参数型。
-  return (...[endpoint, config]: Parameters<typeof http>) => {
-    return http(endpoint, { ...config, token: user?.token });
-  };
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) => {
+      return http(endpoint, { ...config, token: user?.token });
+    },
+    [user?.token]
+  );
 };
 
 // utility type的用法：用泛型给它传入一个其他类型，然后用utility type对这份类型进行某种操作。Parameters就是一种utility type

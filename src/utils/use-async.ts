@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMountedRef } from "utils";
 
 interface State<D> {
@@ -34,53 +34,60 @@ export const useAsync = <D>(
   const [retry, setRetry] = useState(() => () => {});
 
   // data是D类型
-  const setData = (data: D) =>
-    setState({
-      data,
-      stat: "success",
-      error: null,
-    });
+  const setData = useCallback(
+    (data: D) =>
+      setState({
+        data,
+        stat: "success",
+        error: null,
+      }),
+    []
+  );
 
-  const setError = (error: Error) =>
-    setState({
-      error,
-      stat: "error",
-      data: null,
-    });
+  const setError = useCallback(
+    (error: Error) =>
+      setState({
+        error,
+        stat: "error",
+        data: null,
+      }),
+    []
+  );
 
   // run用来触发异步请求
   // Promise里包含的是D类型的数据
-  const run = (
-    promise: Promise<D>,
-    runConfig?: { retry: () => Promise<D> }
-  ) => {
-    // 没传或者不是promise数据
-    if (!promise || !promise.then) {
-      throw new Error("请输入 Promise类型的数据");
-    }
-    setRetry(() => () => {
-      // run(promise)时，setRetry更新的函数是run(promise)返回的结果，即新的newPromise，而不是run的入参promise。其实页面时重新渲染的，setData(data)走了一遍
-      if (runConfig?.retry) {
-        // 要想第一次retry之后，可以继续刷新，runConfig必传
-        run(runConfig?.retry(), runConfig);
+  const run = useCallback(
+    (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      // 没传或者不是promise数据
+      if (!promise || !promise.then) {
+        throw new Error("请输入 Promise类型的数据");
       }
-    });
-    setState({ ...state, stat: "loading" });
-    return promise
-      .then((data) => {
-        if (mountedRef.current) setData(data);
-        return data;
-      })
-      .catch((error) => {
-        // catch会消化异常，如果不主动抛出异常，外面是接收不到的
-        setError(error);
-        if (config.throwOnError) {
-          return Promise.reject(error);
-        } else {
-          return error;
+      setRetry(() => () => {
+        // run(promise)时，setRetry更新的函数是run(promise)返回的结果，即新的newPromise，而不是run的入参promise。其实页面时重新渲染的，setData(data)走了一遍
+        if (runConfig?.retry) {
+          // 要想第一次retry之后，可以继续刷新，runConfig必传
+          run(runConfig?.retry(), runConfig);
         }
       });
-  };
+      // 用到了state，又把state加到依赖里，出现无限循环，用传入函数而不是传入对象的方式，更新state
+      setState((prevState) => ({ ...prevState, stat: "loading" }));
+      return promise
+        .then((data) => {
+          if (mountedRef.current) setData(data);
+          return data;
+        })
+        .catch((error) => {
+          // catch会消化异常，如果不主动抛出异常，外面是接收不到的
+          setError(error);
+          if (config.throwOnError) {
+            return Promise.reject(error);
+          } else {
+            return error;
+          }
+        });
+    },
+    [config.throwOnError, mountedRef, setData, setError]
+  );
   return {
     isIdle: state.stat === "idle",
     isLoading: state.stat === "loading",
