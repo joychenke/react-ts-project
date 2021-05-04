@@ -23,3 +23,19 @@ export const useDocumentTitle = (
 
 // 重置路由状态 + 刷新整个页面
 export const resetRoute = () => (window.location.href = window.location.origin);
+
+/**
+ * 返回组件的挂载状态，如果还没挂载，或 已经卸载，返回false；否则，返回true
+ */
+export const useMountedRef = () => {
+  const mountedRef = useRef(false);
+  useEffect(() => {
+    // 挂载成功，是true
+    mountedRef.current = true;
+    // 卸载
+    return () => {
+      mountedRef.current = false;
+    };
+  });
+  return mountedRef;
+};
