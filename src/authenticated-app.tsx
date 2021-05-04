@@ -20,6 +20,7 @@ import { resetRoute } from "utils";
  */
 
 export const AuthenticatedApp = () => {
+  // 能够访问Container、PageHeader等变量的原因是：这些变量只是跟在return后面，被返回出去了；但是并没有被执行；container虽然是由const定义的，但是也有变量提升，只是不能马上使用
   return (
     <Container>
       <PageHeader />
@@ -44,7 +45,6 @@ export const AuthenticatedApp = () => {
 
 // 将header部分的内容抽离出来
 const PageHeader = () => {
-  const { logout, user } = useAuth();
   return (
     <Header between={true}>
       <HeaderLeft gap={1}>
@@ -55,23 +55,30 @@ const PageHeader = () => {
         <h2>用户</h2>
       </HeaderLeft>
       <HeaderRight>
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key={"logout"}>
-                <Button type={"link"} onClick={logout}>
-                  登出
-                </Button>
-              </Menu.Item>
-            </Menu>
-          }
-        >
-          <Button type={"link"} onClick={(e) => e.preventDefault()}>
-            Hi, {user?.name}
-          </Button>
-        </Dropdown>
+        <User />
       </HeaderRight>
     </Header>
+  );
+};
+
+const User = () => {
+  const { logout, user } = useAuth();
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item key={"logout"}>
+            <Button type={"link"} onClick={logout}>
+              登出
+            </Button>
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <Button type={"link"} onClick={(e) => e.preventDefault()}>
+        Hi, {user?.name}
+      </Button>
+    </Dropdown>
   );
 };
 
