@@ -22,13 +22,29 @@ import { ProjectPopover } from "components/project-popover";
  * 从内容出发用flex，从布局出发用grid
  */
 
+/**
+ * 用状态提升的方式，有几个问题：
+ * 1，函数定义和调用隔得太远，当修改函数时，调用的地方也要进行修改
+ * 2，代码耦合太强
+ *
+ */
+
+// 控制反转 的介绍： https://zhuanlan.zhihu.com/p/60995312
 export const AuthenticatedApp = () => {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   // 能够访问Container、PageHeader等变量的原因是：这些变量只是跟在return后面，被返回出去了；但是并没有被执行；container虽然是由const定义的，但是也有变量提升，只是不能马上使用
   return (
     <Container>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
-      {/* <Button onClick={() => setProjectModalOpen(true)}>打开modal</Button> */}
+      <PageHeader
+        projectButton={
+          <ButtonNoPadding
+            onClick={() => setProjectModalOpen(true)}
+            type={"link"}
+          >
+            创建项目
+          </ButtonNoPadding>
+        }
+      />
       <Main>
         <Router>
           {/* 在react-router 6中路由都用Routes包裹起来 */}
@@ -36,7 +52,16 @@ export const AuthenticatedApp = () => {
             <Route
               path={"/projects"}
               element={
-                <ProjectList setProjectModalOpen={setProjectModalOpen} />
+                <ProjectList
+                  projectButton={
+                    <ButtonNoPadding
+                      type={"link"}
+                      onClick={() => setProjectModalOpen(true)}
+                    >
+                      创建项目
+                    </ButtonNoPadding>
+                  }
+                />
               }
             ></Route>
             {/* 不加 * 的话，projects/1/kanban 将不会渲染 */}
@@ -58,18 +83,14 @@ export const AuthenticatedApp = () => {
 };
 
 // 将header部分的内容抽离出来
-const PageHeader = (props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+const PageHeader = (props: { projectButton: JSX.Element }) => {
   return (
     <Header between={true}>
       <HeaderLeft gap={1}>
         <ButtonNoPadding type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </ButtonNoPadding>
-        <ProjectPopover
-          setProjectModalOpen={props.setProjectModalOpen}
-        ></ProjectPopover>
+        <ProjectPopover projectButton={props.projectButton}></ProjectPopover>
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

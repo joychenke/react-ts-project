@@ -17,7 +17,7 @@ export interface List {
 interface TableListProps extends TableProps<List> {
   users: User[];
   refresh?: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
+  projectButton: JSX.Element;
 }
 // 将表格替换为antd组件形式
 // 剩下的键值都放在props里, 如果用类型别名定义props的类型则如下PropsType：
@@ -81,14 +81,7 @@ export const TableList = ({ users, ...props }: TableListProps) => {
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item key={"edit"}>
-                      <ButtonNoPadding
-                        type={"link"}
-                        onClick={() => props.setProjectModalOpen(true)}
-                      >
-                        编辑
-                      </ButtonNoPadding>
-                    </Menu.Item>
+                    <Menu.Item key={"edit"}>{props.projectButton}</Menu.Item>
                   </Menu>
                 }
               >
