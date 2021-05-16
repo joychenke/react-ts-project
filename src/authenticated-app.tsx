@@ -8,9 +8,10 @@ import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
-import { useState } from "react";
 import { ProjectModal } from "screens/project-list/project-modal";
 import { ProjectPopover } from "components/project-popover";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "screens/project-list/project-list.slice";
 
 /**
  * grid和flex应用的场景
@@ -31,20 +32,11 @@ import { ProjectPopover } from "components/project-popover";
 
 // 控制反转 的介绍： https://zhuanlan.zhihu.com/p/60995312
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const dispatch = useDispatch();
   // 能够访问Container、PageHeader等变量的原因是：这些变量只是跟在return后面，被返回出去了；但是并没有被执行；container虽然是由const定义的，但是也有变量提升，只是不能马上使用
   return (
     <Container>
-      <PageHeader
-        projectButton={
-          <ButtonNoPadding
-            onClick={() => setProjectModalOpen(true)}
-            type={"link"}
-          >
-            创建项目
-          </ButtonNoPadding>
-        }
-      />
+      <PageHeader />
       <Main>
         <Router>
           {/* 在react-router 6中路由都用Routes包裹起来 */}
@@ -56,7 +48,9 @@ export const AuthenticatedApp = () => {
                   projectButton={
                     <ButtonNoPadding
                       type={"link"}
-                      onClick={() => setProjectModalOpen(true)}
+                      onClick={() =>
+                        dispatch(projectListActions.openPrjectModal())
+                      }
                     >
                       创建项目
                     </ButtonNoPadding>
@@ -74,23 +68,20 @@ export const AuthenticatedApp = () => {
           </Routes>
         </Router>
       </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      ></ProjectModal>
+      <ProjectModal></ProjectModal>
     </Container>
   );
 };
 
 // 将header部分的内容抽离出来
-const PageHeader = (props: { projectButton: JSX.Element }) => {
+const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={1}>
         <ButtonNoPadding type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </ButtonNoPadding>
-        <ProjectPopover projectButton={props.projectButton}></ProjectPopover>
+        <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

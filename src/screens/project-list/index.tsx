@@ -2,11 +2,13 @@ import { SearchPanel } from "./search-panel";
 import { TableList } from "./table-list";
 import { useDebounce, useProjectsSearchParams } from "./util";
 import styled from "@emotion/styled";
-import { Button, Typography } from "antd";
+import { Typography } from "antd";
 import { useProject } from "utils/project";
 import { useUser } from "utils/user";
 import { useDocumentTitle } from "utils";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./project-list.slice";
 export const ProjectList = (props: { projectButton: JSX.Element }) => {
   useDocumentTitle("项目列表", false);
   // 基本类型，可以放到依赖里;组件状态，可以放到依赖里；非组件状态的对象，绝对不可以放到依赖里
@@ -15,12 +17,18 @@ export const ProjectList = (props: { projectButton: JSX.Element }) => {
     useDebounce(param, 500)
   );
   const { data: users } = useUser();
+  const dispatch = useDispatch();
 
   return (
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        {props.projectButton}
+        <ButtonNoPadding
+          onClick={() => dispatch(projectListActions.openPrjectModal())}
+          type={"link"}
+        >
+          创建项目
+        </ButtonNoPadding>
       </Row>
       {/* 泛型，不指定类型，根据传入的值，动态判断类型 */}
       <SearchPanel param={param} users={users || []} setParam={setParam} />
