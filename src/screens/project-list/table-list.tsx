@@ -19,7 +19,6 @@ export interface List {
 interface TableListProps extends TableProps<List> {
   users: User[];
   refresh?: () => void;
-  projectButton: JSX.Element;
 }
 // 将表格替换为antd组件形式
 // 剩下的键值都放在props里, 如果用类型别名定义props的类型则如下PropsType：

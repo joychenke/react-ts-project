@@ -10,8 +10,6 @@ import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
 import { ProjectModal } from "screens/project-list/project-modal";
 import { ProjectPopover } from "components/project-popover";
-import { useDispatch } from "react-redux";
-import { projectListActions } from "screens/project-list/project-list.slice";
 
 /**
  * grid和flex应用的场景
@@ -32,7 +30,6 @@ import { projectListActions } from "screens/project-list/project-list.slice";
 
 // 控制反转 的介绍： https://zhuanlan.zhihu.com/p/60995312
 export const AuthenticatedApp = () => {
-  const dispatch = useDispatch();
   // 能够访问Container、PageHeader等变量的原因是：这些变量只是跟在return后面，被返回出去了；但是并没有被执行；container虽然是由const定义的，但是也有变量提升，只是不能马上使用
   return (
     <Container>
@@ -41,23 +38,7 @@ export const AuthenticatedApp = () => {
         <Router>
           {/* 在react-router 6中路由都用Routes包裹起来 */}
           <Routes>
-            <Route
-              path={"/projects"}
-              element={
-                <ProjectList
-                  projectButton={
-                    <ButtonNoPadding
-                      type={"link"}
-                      onClick={() =>
-                        dispatch(projectListActions.openPrjectModal())
-                      }
-                    >
-                      创建项目
-                    </ButtonNoPadding>
-                  }
-                />
-              }
-            ></Route>
+            <Route path={"/projects"} element={<ProjectList />}></Route>
             {/* 不加 * 的话，projects/1/kanban 将不会渲染 */}
             <Route
               path={"/projects/:projectId/*"}
