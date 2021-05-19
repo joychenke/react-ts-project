@@ -7,7 +7,7 @@ import { useMount } from "screens/project-list/util";
 import { http } from "utils/http";
 import { useAsync } from "utils/use-async";
 
-interface AuthForm {
+export interface AuthForm {
   username: string;
   password: string;
 }
@@ -16,7 +16,7 @@ interface AuthForm {
 // type authForm = {username: string, password: string}
 // 类型别名和interface一般等价使用，但是 在或操作符、utility type时，只能用类型别名实现
 
-const bootstrapUser = async () => {
+export const bootstrapUser = async () => {
   let user = null;
   const token = auth.getToken();
   if (token) {
