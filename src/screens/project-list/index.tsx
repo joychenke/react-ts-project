@@ -1,13 +1,14 @@
 import { SearchPanel } from "./search-panel";
 import { TableList } from "./table-list";
-import { useDebounce, useProjectsSearchParams } from "./util";
+import { useDebounce, useProjectModal, useProjectsSearchParams } from "./util";
 import styled from "@emotion/styled";
-import { Button, Typography } from "antd";
+import { Typography } from "antd";
 import { useProject } from "utils/project";
 import { useUser } from "utils/user";
 import { useDocumentTitle } from "utils";
-import { Row } from "components/lib";
-export const ProjectList = (props: { projectButton: JSX.Element }) => {
+import { ButtonNoPadding, Row } from "components/lib";
+export const ProjectList = () => {
+  const { open } = useProjectModal();
   useDocumentTitle("项目列表", false);
   // 基本类型，可以放到依赖里;组件状态，可以放到依赖里；非组件状态的对象，绝对不可以放到依赖里
   const [param, setParam] = useProjectsSearchParams();
@@ -20,7 +21,9 @@ export const ProjectList = (props: { projectButton: JSX.Element }) => {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        {props.projectButton}
+        <ButtonNoPadding onClick={open} type={"link"}>
+          创建项目
+        </ButtonNoPadding>
       </Row>
       {/* 泛型，不指定类型，根据传入的值，动态判断类型 */}
       <SearchPanel param={param} users={users || []} setParam={setParam} />
@@ -30,7 +33,6 @@ export const ProjectList = (props: { projectButton: JSX.Element }) => {
       {/* dataSource,loading, users，透传给了TableList组件，除了users，其他两个都被TableList组件以props属性接收 */}
       {/* 从useAsync的定义中可知，list有可能是null，因此是 list || [] */}
       <TableList
-        projectButton={props.projectButton}
         refresh={retry}
         dataSource={list || []}
         users={users || []}

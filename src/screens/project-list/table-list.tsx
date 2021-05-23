@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
+import { useProjectModal } from "./util";
 export interface List {
   id: number;
   name: string;
@@ -17,12 +18,12 @@ export interface List {
 interface TableListProps extends TableProps<List> {
   users: User[];
   refresh?: () => void;
-  projectButton: JSX.Element;
 }
 // 将表格替换为antd组件形式
 // 剩下的键值都放在props里, 如果用类型别名定义props的类型则如下PropsType：
 // type PropsType = Omit<TableListProps, 'users'>
 export const TableList = ({ users, ...props }: TableListProps) => {
+  const { open } = useProjectModal();
   // useEditProject是react hook，只能在顶层调用，而mutate是纯函数，不受此规则限制
   const { mutate } = useEditProject();
   // 函数式编程，point free的写法
@@ -81,7 +82,13 @@ export const TableList = ({ users, ...props }: TableListProps) => {
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item key={"edit"}>{props.projectButton}</Menu.Item>
+                    <Menu.Item key={"edit"}>
+                      {
+                        <ButtonNoPadding onClick={open} type={"link"}>
+                          编辑
+                        </ButtonNoPadding>
+                      }
+                    </Menu.Item>
                   </Menu>
                 }
               >

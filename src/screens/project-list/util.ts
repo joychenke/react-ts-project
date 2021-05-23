@@ -71,3 +71,23 @@ export const useProjectsSearchParams = () => {
     setParam,
   ] as const;
 };
+
+/**
+ * 管理模态框状态的hook
+ * @returns projectModalOpen: 开关状态; open: 打开模态框方法; close: 关闭模态框方法
+ */
+export const useProjectModal = () => {
+  const [{ projectCreate }, setProjectCreate] = useUrlQueryParam([
+    "projectCreate",
+  ]);
+
+  const open = () => setProjectCreate({ projectCreate: true });
+  const close = () => setProjectCreate({ projectCreate: undefined });
+
+  return {
+    // 从 url 获取到的变量，都是string类型
+    projectModalOpen: projectCreate === "true",
+    open,
+    close,
+  };
+};
