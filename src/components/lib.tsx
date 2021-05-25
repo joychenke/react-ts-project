@@ -44,6 +44,17 @@ export const FullPageErrorFallback = ({ error }: { error: Error | null }) => (
   </FullPage>
 );
 
+// 类型守卫
+const isError = (value: any): value is Error => value?.message;
+
+export const ErrorBox = ({ error }: { error: unknown }) => {
+  if (isError(error)) {
+    return <Typography.Text type={"danger"}>{error?.message}</Typography.Text>;
+  }
+  // 必不可少，否则ErrorBox不能作为jsx element用
+  return null;
+};
+
 export const ButtonNoPadding = styled(Button)`
   padding: 0;
 `;
