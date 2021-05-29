@@ -22,11 +22,13 @@ interface TableListProps extends TableProps<List> {
 // 剩下的键值都放在props里, 如果用类型别名定义props的类型则如下PropsType：
 // type PropsType = Omit<TableListProps, 'users'>
 export const TableList = ({ users, ...props }: TableListProps) => {
-  const { open } = useProjectModal();
   // useEditProject是react hook，只能在顶层调用，而mutate是纯函数，不受此规则限制
   const { mutate } = useEditProject();
+  const { startEdit } = useProjectModal();
+
   // 函数式编程，point free的写法
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const editProject = (id: number) => () => startEdit(id);
   return (
     <Table
       columns={[
@@ -80,13 +82,10 @@ export const TableList = ({ users, ...props }: TableListProps) => {
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item key={"edit"}>
-                      {
-                        <ButtonNoPadding onClick={open} type={"link"}>
-                          编辑
-                        </ButtonNoPadding>
-                      }
+                    <Menu.Item onClick={editProject(project.id)} key={"edit"}>
+                      编辑
                     </Menu.Item>
+                    <Menu.Item key={"delete"}>删除</Menu.Item>
                   </Menu>
                 }
               >

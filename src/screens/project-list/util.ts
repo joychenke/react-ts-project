@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useProjectDetail } from "utils/project";
 import { useUrlQueryParam } from "utils/url";
 // null,undefined,空字符串都是没有意义的，删除
 const isVoid = (value: unknown) =>
@@ -81,13 +83,26 @@ export const useProjectModal = () => {
     "projectCreate",
   ]);
 
+  const [{ editingProjectId }, setEditintProjectId] = useUrlQueryParam([
+    "editingProjectId",
+  ]);
+
+  const [_, setUrlParams] = useSearchParams();
+  const { data: editingProject, isLoading } = useProjectDetail(
+    Number(editingProjectId)
+  );
   const open = () => setProjectCreate({ projectCreate: true });
-  const close = () => setProjectCreate({ projectCreate: undefined });
+  const close = () => setUrlParams({ projectCreate: "", editingProjectId: "" });
+  const startEdit = (id: number) =>
+    setEditintProjectId({ editingProjectId: id });
 
   return {
     // 从 url 获取到的变量，都是string类型
-    projectModalOpen: projectCreate === "true",
+    projectModalOpen: projectCreate === "true" || !!editingProjectId,
     open,
     close,
+    startEdit,
+    editingProject,
+    isLoading,
   };
 };

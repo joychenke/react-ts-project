@@ -32,12 +32,26 @@ export const useAddProject = () => {
   const queryClient = useQueryClient();
   return useMutation(
     (params: Partial<List>) =>
-      client(`projects/${params.id}`, {
+      client(`projects`, {
         data: params,
         method: "POST",
       }),
     {
       onSuccess: () => queryClient.invalidateQueries("projects"),
+    }
+  );
+};
+
+export const useProjectDetail = (id?: number) => {
+  const client = useHttp();
+  console.log("useProjectDetail", id);
+  return useQuery<List>(
+    ["project", { id }],
+    () => client(`projects/${id}`),
+    // 一般设计api时，最后一个参数，会是配置参数
+    {
+      // id存在时，才会调用上面的获取详情接口
+      enabled: !!id,
     }
   );
 };
