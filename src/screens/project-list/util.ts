@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useProjectDetail } from "utils/project";
-import { useUrlQueryParam } from "utils/url";
+import { useSetUrlSearchParams, useUrlQueryParam } from "utils/url";
 // null,undefined,空字符串都是没有意义的，删除
 const isVoid = (value: unknown) =>
   value === null || value === undefined || value === "";
@@ -92,7 +91,7 @@ export const useProjectModal = () => {
     "editingProjectId",
   ]);
 
-  const [_, setUrlParams] = useSearchParams();
+  const setUrlParams = useSetUrlSearchParams();
   const { data: editingProject, isLoading } = useProjectDetail(
     Number(editingProjectId)
   );
