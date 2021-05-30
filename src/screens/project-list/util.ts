@@ -74,6 +74,11 @@ export const useProjectsSearchParams = () => {
   ] as const;
 };
 
+export const useProjectsQueryKey = () => {
+  const [params] = useProjectsSearchParams();
+  return ["projects", params];
+};
+
 /**
  * 管理模态框状态的hook
  * @returns projectModalOpen: 开关状态; open: 打开模态框方法; close: 关闭模态框方法
