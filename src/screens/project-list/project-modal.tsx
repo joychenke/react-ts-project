@@ -27,6 +27,11 @@ export const ProjectModal = () => {
     });
   };
 
+  const closeModal = () => {
+    form.resetFields();
+    close();
+  };
+
   const title = editingProject ? "编辑项目" : "创建项目";
 
   // 当表单内容改变时，重置表单
@@ -39,7 +44,7 @@ export const ProjectModal = () => {
     <Drawer
       forceRender={true}
       visible={projectModalOpen}
-      onClose={close}
+      onClose={closeModal}
       width={"100%"}
     >
       <Container>
