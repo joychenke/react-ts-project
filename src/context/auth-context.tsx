@@ -2,6 +2,7 @@
 import * as auth from "auth-provider";
 import { FullPageErrorFallback, FullPageLoading } from "components/lib";
 import { default as React, ReactNode } from "react";
+import { useQueryClient } from "react-query";
 import { User } from "screens/project-list/search-panel";
 import { useMount } from "screens/project-list/util";
 import { http } from "utils/http";
@@ -49,10 +50,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     run,
     setData: setUser,
   } = useAsync<User | null>();
+  const queryClient = useQueryClient();
+
   // then方法里,setUser 等价于 (user) => setUser(user); 函数式编程的point free概念
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      queryClient.clear();
+    });
 
   // 整个App加载的时候，去获取用户数据
   useMount(() => {
