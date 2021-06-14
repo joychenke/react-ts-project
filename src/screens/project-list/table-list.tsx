@@ -1,19 +1,12 @@
 import { Dropdown, Menu, Modal, Table, TableProps } from "antd";
 import dayjs from "dayjs";
-import { User } from "./search-panel";
+import { User } from "../../types/User";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useDeleteProject, useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
 import { useProjectModal, useProjectsQueryKey } from "./util";
-export interface List {
-  id: number;
-  name: string;
-  personId: number;
-  pin: boolean;
-  organization: string;
-  created: number;
-}
+import { List } from "../../types/List";
 // 用添加isLoading的方式加loading，这个extends是最重要的
 interface TableListProps extends TableProps<List> {
   users: User[];

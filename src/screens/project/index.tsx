@@ -14,7 +14,11 @@ export const ProjectScreen = () => {
         <Route path={"/kanban"} element={<KanbanScreen />} />
         <Route path={"/epic"} element={<EpicScreen />} />
         {/* 默认跳转到 /projects/:projectId/kanban  */}
-        <Navigate to={window.location.pathname + "/kanban"}></Navigate>
+        {/* 不加replace时，往后跳，到的是projects/:projectId，上面两项都不符合，又到了默认路由，所以页面上看到的是，跳转时，页面没动 */}
+        <Navigate
+          to={window.location.pathname + "/kanban"}
+          replace={true}
+        ></Navigate>
       </Routes>
     </div>
   );

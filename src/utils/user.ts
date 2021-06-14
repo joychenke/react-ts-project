@@ -1,4 +1,4 @@
-import { User } from "screens/project-list/search-panel";
+import { User } from "types/User";
 import { clearParam, useMount } from "screens/project-list/util";
 import { useHttp } from "./http";
 import { useAsync } from "./use-async";

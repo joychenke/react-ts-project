@@ -1,4 +1,4 @@
-import { User } from "screens/project-list/search-panel";
+import { User } from "types/User";
 
 // 如果使用的是firebase这种三方auth服务，不需要开发这个文件
 const localStorageKey = "__auth_provider_token__";

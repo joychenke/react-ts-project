@@ -1,5 +1,5 @@
 import { QueryKey, useMutation, useQuery } from "react-query";
-import { List } from "screens/project-list/table-list";
+import { List } from "types/List";
 import { useHttp } from "./http";
 import {
   useAddConfig,
