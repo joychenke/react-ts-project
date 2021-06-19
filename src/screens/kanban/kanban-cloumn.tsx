@@ -13,7 +13,7 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
   if (!name) {
     return null;
   }
-  return <img src={name === "task" ? taskIcon : bugIcon} />;
+  return <img src={name === "task" ? taskIcon : bugIcon} alt="img" />;
 };
 
 export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
@@ -26,7 +26,7 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
         {tasks?.map((task) => (
           <Card style={{ marginBottom: "0.5rem" }} key={task.id}>
             <div>{task.name}</div>
-            <TaskTypeIcon id={task.typeId}></TaskTypeIcon>
+            <TaskTypeIcon id={task.typeId} />
           </Card>
         ))}
       </TaskContainer>
