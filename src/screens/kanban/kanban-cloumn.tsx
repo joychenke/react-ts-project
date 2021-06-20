@@ -1,7 +1,7 @@
 import { Kanban } from "types/kanban";
 import { useTasks } from "utils/task";
 import { useTaskTypes } from "utils/task-type";
-import { useTasksSearchParams } from "./util";
+import { useTasksModal, useTasksSearchParams } from "./util";
 import taskIcon from "assets/task.svg";
 import bugIcon from "assets/bug.svg";
 import styled from "@emotion/styled";
@@ -20,13 +20,19 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
 export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
   const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
+  // 点击card时，编辑task
+  const { startEdit } = useTasksModal();
   return (
     <Container>
       <h3>{kanban.name}</h3>
       <TaskContainer>
         {tasks?.map((task) => (
           // 当task.id是undefined，控制台会报错，所以给一个默认值taskId
-          <Card style={{ marginBottom: "0.5rem" }} key={task.id || "taskId"}>
+          <Card
+            onClick={() => startEdit(task.id)}
+            style={{ marginBottom: "0.5rem", cursor: "pointer" }}
+            key={task.id || "taskId"}
+          >
             <div>{task.name}</div>
             <TaskTypeIcon id={task.typeId} />
           </Card>

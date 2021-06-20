@@ -7,6 +7,7 @@ import { useKanbans } from "utils/kanban";
 import { useTasks } from "utils/task";
 import { CreateKanban } from "./create-kanban";
 import { KanbanColumn } from "./kanban-cloumn";
+import { TaskModal } from "./task-modal";
 import {
   useKanbanSearchParams,
   useProjectInUrl,
@@ -39,6 +40,7 @@ export const KanbanScreen = () => {
           <CreateKanban />
         </KanbanContainer>
       )}
+      <TaskModal />
     </ScreenContainer>
   );
 };
