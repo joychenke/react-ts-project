@@ -25,7 +25,8 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
       <h3>{kanban.name}</h3>
       <TaskContainer>
         {tasks?.map((task) => (
-          <Card style={{ marginBottom: "0.5rem" }} key={task.id}>
+          // 当task.id是undefined，控制台会报错，所以给一个默认值taskId
+          <Card style={{ marginBottom: "0.5rem" }} key={task.id || "taskId"}>
             <div>{task.name}</div>
             <TaskTypeIcon id={task.typeId} />
           </Card>

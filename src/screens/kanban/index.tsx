@@ -30,7 +30,11 @@ export const KanbanScreen = () => {
       ) : (
         <KanbanContainer>
           {kanbans?.map((kanban) => (
-            <KanbanColumn kanban={kanban} key={kanban.id}></KanbanColumn>
+            // kanban.id是undefined时，控制台会报错，所以给一个默认值 kanbanId
+            <KanbanColumn
+              kanban={kanban}
+              key={kanban.id || "kanbanId"}
+            ></KanbanColumn>
           ))}
           <CreateKanban />
         </KanbanContainer>

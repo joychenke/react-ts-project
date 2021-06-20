@@ -9,8 +9,9 @@ export const CreateTask = ({ kanbanId }: { kanbanId: number }) => {
   const projectId = useProjectIdInUrl();
   const [inputMode, setInputMode] = useState(false);
 
-  const submit = async () => {
-    await addTask({ projectId, name, kanbanId });
+  // 去掉async await，直接执行下两步，让乐观更新更流畅
+  const submit = () => {
+    addTask({ projectId, name, kanbanId });
     setInputMode(false);
     setName("");
   };
