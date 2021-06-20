@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { ScreenContainer } from "components/lib";
 import { SearchPanel } from "screens/kanban/search-panel";
 import { useDocumentTitle } from "utils";
 import { useKanbans } from "utils/kanban";
@@ -10,7 +11,7 @@ export const KanbanScreen = () => {
   const { data: currentProject } = useProjectInUrl();
   const { data: kanbans } = useKanbans(useKanbanSearchParams());
   return (
-    <div>
+    <ScreenContainer>
       <h1>{currentProject?.name}看板</h1>
       <SearchPanel></SearchPanel>
       <KanbanContainer>
@@ -18,10 +19,12 @@ export const KanbanScreen = () => {
           <KanbanColumn kanban={kanban} key={kanban.id}></KanbanColumn>
         ))}
       </KanbanContainer>
-    </div>
+    </ScreenContainer>
   );
 };
 
 const KanbanContainer = styled.div`
   display: flex;
+  /* 上面的 h1和 div都是固定高度，KanbanContainer占满盒子 */
+  flex-grow: 1;
 `;
