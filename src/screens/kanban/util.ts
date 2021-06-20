@@ -16,7 +16,8 @@ export const useProjectInUrl = () => {
 
 export const useKanbanSearchParams = () => ({ projectId: useProjectIdInUrl() });
 
-export const useKanbansQueryKey = () => ["kanbans", useKanbanSearchParams];
+// useKanbansQueryKey如果取值不对，则react-query的key不对，这会导致用到QueryKey的地方，也会不对，比如 useAddConfig 会失效
+export const useKanbansQueryKey = () => ["kanbans", useKanbanSearchParams()];
 
 export const useTasksSearchParams = () => {
   const [param] = useUrlQueryParam(["name", "typeId", "processorId", "tagId"]);
@@ -33,4 +34,4 @@ export const useTasksSearchParams = () => {
   );
 };
 
-export const useTasksQueryKey = () => ["tasks", useTasksSearchParams];
+export const useTasksQueryKey = () => ["tasks", useTasksSearchParams()];

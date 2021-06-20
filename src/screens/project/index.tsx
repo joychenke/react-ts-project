@@ -45,9 +45,11 @@ const Aside = styled.aside`
   display: flex;
 `;
 
+// main里面hidden，TaskContainer里scroll, 滚动条出现在taskContainer里
 const Main = styled.div`
   box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.1);
   display: flex;
+  overflow: hidden;
 `;
 
 // 左边 16rem，右边自动往右扩展
