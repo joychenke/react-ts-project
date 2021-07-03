@@ -1,9 +1,9 @@
-import { Form, Input, Modal, Spin } from "antd";
+import { Button, Form, Input, Modal, Spin } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { TaskTypeSelect } from "components/task-type-select";
 import { UserSelect } from "components/user-select";
 import { useEffect } from "react";
-import { useEditTask } from "utils/task";
+import { useDeleteTask, useEditTask } from "utils/task";
 import { useTasksModal, useTasksQueryKey } from "./util";
 
 // 设置左边文字和右边表单的样式
@@ -24,6 +24,7 @@ export const TaskModal = () => {
   const { mutateAsync: editTask, isLoading: editLoading } = useEditTask(
     useTasksQueryKey()
   );
+  const { mutateAsync: deleteTask } = useDeleteTask(useTasksQueryKey());
 
   // 关闭时，先关掉，然后重置数据
   const onCancel = () => {
@@ -35,6 +36,19 @@ export const TaskModal = () => {
   const onOk = async () => {
     editTask({ ...editingTask, ...form.getFieldsValue() });
     close();
+  };
+
+  // 删除看板和任务
+  const startDelete = () => {
+    close();
+    Modal.confirm({
+      okText: "确定",
+      cancelText: "取消",
+      title: "确定删除任务吗？",
+      onOk() {
+        return deleteTask({ id: Number(editingTaskId) });
+      },
+    });
   };
 
   // 当form 或者 editingTask改变时，更新form的数据
@@ -59,21 +73,32 @@ export const TaskModal = () => {
           <Spin size={"large"}></Spin>
         </div>
       ) : (
-        <Form {...layout} form={form} initialValues={editingTask}>
-          <Form.Item
-            label={"任务名"}
-            name={"name"}
-            rules={[{ required: true, message: "请输入任务名" }]}
-          >
-            <Input></Input>
-          </Form.Item>
-          <Form.Item label={"经办人"} name={"processorId"}>
-            <UserSelect defaultOptionName={"经办人"}></UserSelect>
-          </Form.Item>
-          <Form.Item label={"类型"} name={"typeId"}>
-            <TaskTypeSelect></TaskTypeSelect>
-          </Form.Item>
-        </Form>
+        <>
+          <Form {...layout} form={form} initialValues={editingTask}>
+            <Form.Item
+              label={"任务名"}
+              name={"name"}
+              rules={[{ required: true, message: "请输入任务名" }]}
+            >
+              <Input></Input>
+            </Form.Item>
+            <Form.Item label={"经办人"} name={"processorId"}>
+              <UserSelect defaultOptionName={"经办人"}></UserSelect>
+            </Form.Item>
+            <Form.Item label={"类型"} name={"typeId"}>
+              <TaskTypeSelect></TaskTypeSelect>
+            </Form.Item>
+          </Form>
+          <div style={{ textAlign: "right" }}>
+            <Button
+              onClick={startDelete}
+              size={"small"}
+              style={{ fontSize: "14px" }}
+            >
+              删除
+            </Button>
+          </div>
+        </>
       )}
     </Modal>
   );
