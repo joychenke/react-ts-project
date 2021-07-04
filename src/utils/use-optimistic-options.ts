@@ -37,3 +37,7 @@ export const useAddConfig = (queryKey: QueryKey) =>
   useConfig(queryKey, (target, old) => {
     return old ? [...old, target] : [];
   });
+
+// 暂时写一个空函数，useConfig里真正的逻辑后面会加上
+export const useReorderConfig = (queryKey: QueryKey) =>
+  useConfig(queryKey, (target, old) => old || []);
