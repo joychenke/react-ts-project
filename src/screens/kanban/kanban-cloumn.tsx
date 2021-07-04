@@ -15,6 +15,8 @@ import { Task } from "types/task";
 import { Mark } from "components/mark";
 import { useDeleteKanban } from "utils/kanban";
 import { Row } from "components/lib";
+import React from "react";
+import { Drag, Drop, DropChild } from "components/drag-and-drop";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -25,43 +27,67 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
   return <img src={name === "task" ? taskIcon : bugIcon} alt="img" />;
 };
 
-const TaskCard = ({ task }: { task: Task }) => {
-  // 当task.id是undefined，控制台会报错，所以给一个默认值taskId
-  // 点击card时，编辑task
-  const { startEdit } = useTasksModal();
-  const { name: keyword } = useTasksSearchParams();
-  return (
-    <Card
-      onClick={() => startEdit(task.id)}
-      style={{ marginBottom: "0.5rem", cursor: "pointer" }}
-      key={task.id || "taskId"}
-    >
-      <p>
-        <Mark keyword={keyword} name={task.name}></Mark>
-      </p>
-      <TaskTypeIcon id={task.typeId} />
-    </Card>
-  );
-};
+// 也可以不在TaskCard定义的外面包 React.forwardRef，而是在TaskCard调用的地方，TaskCard标签外面再套一层div，因为div标签可以有转发
+const TaskCard = React.forwardRef<HTMLDivElement, { task: Task }>(
+  ({ task, ...props }, ref) => {
+    // 当task.id是undefined，控制台会报错，所以给一个默认值taskId
+    // 点击card时，编辑task
+    const { startEdit } = useTasksModal();
+    const { name: keyword } = useTasksSearchParams();
+    return (
+      <div ref={ref} {...props}>
+        <Card
+          onClick={() => startEdit(task.id)}
+          style={{ marginBottom: "0.5rem", cursor: "pointer" }}
+          key={task.id || "taskId"}
+        >
+          <p>
+            <Mark keyword={keyword} name={task.name}></Mark>
+          </p>
+          <TaskTypeIcon id={task.typeId} />
+        </Card>
+      </div>
+    );
+  }
+);
 
-export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
+// Drag在定义的地方，用 React.cloneElement 给它的children元素加了ref属性，做转发； 因此要在这个地方加上forwardRef反复
+// KanbanColumn 是 Drag 的子元素，React.cloneElement克隆子元素时，给新元素传除ref以外的其他属性，都放在  { kanban, ...props } 里
+export const KanbanColumn = React.forwardRef<
+  HTMLDivElement,
+  { kanban: Kanban }
+>(({ kanban, ...props }, ref) => {
   const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
   return (
-    <Container>
+    <Container ref={ref} {...props}>
       <Row between={true}>
         <h3>{kanban.name}</h3>
-        <More kanban={kanban}></More>
+        <More kanban={kanban} key={kanban.id}></More>
       </Row>
       <TaskContainer>
-        {tasks?.map((task) => (
-          <TaskCard task={task} key={task.id}></TaskCard>
-        ))}
+        <Drop
+          type={"ROW"}
+          direction={"vertical"}
+          droppableId={"task" + kanban.id}
+        >
+          <DropChild>
+            {tasks?.map((task, taskIndex) => (
+              <Drag
+                key={task.id}
+                draggableId={"task" + task.id}
+                index={taskIndex}
+              >
+                <TaskCard task={task} key={task.id}></TaskCard>
+              </Drag>
+            ))}
+          </DropChild>
+        </Drop>
         <CreateTask kanbanId={kanban.id} />
       </TaskContainer>
     </Container>
   );
-};
+});
 
 const More = ({ kanban }: { kanban: Kanban }) => {
   const { mutateAsync } = useDeleteKanban(useKanbansQueryKey());
