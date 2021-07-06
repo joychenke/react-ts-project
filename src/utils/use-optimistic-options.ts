@@ -1,4 +1,6 @@
 import { QueryKey, useQueryClient } from "react-query";
+import { Task } from "types/task";
+import { reorder } from "./reorder";
 // 生产optimistic update 配置
 export const useConfig = (
   queryKey: QueryKey,
@@ -38,6 +40,15 @@ export const useAddConfig = (queryKey: QueryKey) =>
     return old ? [...old, target] : [];
   });
 
-// 暂时写一个空函数，useConfig里真正的逻辑后面会加上
-export const useReorderConfig = (queryKey: QueryKey) =>
-  useConfig(queryKey, (target, old) => old || []);
+export const useReorderKanbanConfig = (queryKey: QueryKey) =>
+  useConfig(queryKey, (target, old) => reorder({ list: old, ...target }));
+
+export const useReorderTaskConfig = (queryKey: QueryKey) =>
+  useConfig(queryKey, (target, old) => {
+    const orderedList = reorder({ list: old, ...target }) as Task[];
+    return orderedList.map((item) =>
+      item.id === target.fromId
+        ? { ...item, kanbanId: target.toKanbanId }
+        : item
+    );
+  });

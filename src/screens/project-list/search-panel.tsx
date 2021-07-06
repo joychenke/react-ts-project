@@ -10,7 +10,6 @@ interface SearchPanelProps {
   setParam: (param: SearchPanelProps["param"]) => void;
 }
 export const SearchPanel = ({ param, setParam, users }: SearchPanelProps) => {
-  console.log("users:", users);
   return (
     // emotion行内样式
     <Form css={{ marginBottom: "2rem" }} layout={"inline"}>

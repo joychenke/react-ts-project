@@ -5,7 +5,6 @@ export const useDocumentTitle = (
   keepOnUnmount: boolean = true
 ) => {
   const oldTitle = useRef(document.title).current;
-  console.log("渲染时的oldTitle的值：", oldTitle);
   useEffect(() => {
     document.title = title;
   }, [title]);
@@ -14,7 +13,6 @@ export const useDocumentTitle = (
   useEffect(() => {
     return () => {
       if (!keepOnUnmount) {
-        console.log("卸载时的oldTitle的值：", oldTitle);
         document.title = oldTitle;
       }
     };

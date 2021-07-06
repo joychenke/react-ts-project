@@ -53,7 +53,6 @@ export const useDeleteProject = (queryKey: QueryKey) => {
 
 export const useProjectDetail = (id?: number) => {
   const client = useHttp();
-  console.log("useProjectDetail", id);
   return useQuery<List>(
     ["project", { id }],
     () => client(`projects/${id}`),

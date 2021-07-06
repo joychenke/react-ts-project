@@ -4,7 +4,7 @@ import { useHttp } from "./http";
 import {
   useAddConfig,
   useDeleteConfig,
-  useReorderConfig,
+  useReorderKanbanConfig,
 } from "./use-optimistic-options";
 
 // 获取看板信息的hook
@@ -56,5 +56,5 @@ export const useReorderKanban = (queryKey: QueryKey) => {
       data: params,
       method: "POST",
     });
-  }, useReorderConfig(queryKey));
+  }, useReorderKanbanConfig(queryKey));
 };

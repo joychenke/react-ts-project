@@ -93,7 +93,6 @@ export const useDragEnd = () => {
         });
       }
       // 纵向，任务重新排列
-      console.log({ destination, source, type });
       // droppableId -> kanban.id   index -> task的index
       if (type === "ROW") {
         // 将string类型转化为number类型
