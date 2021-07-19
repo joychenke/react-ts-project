@@ -30,7 +30,7 @@ import { UserPopover } from "components/user-popover";
  */
 
 // 控制反转 的介绍： https://zhuanlan.zhihu.com/p/60995312
-export const AuthenticatedApp = () => {
+export default () => {
   // 能够访问Container、PageHeader等变量的原因是：这些变量只是跟在return后面，被返回出去了；但是并没有被执行；container虽然是由const定义的，但是也有变量提升，只是不能马上使用
   return (
     <Container>
