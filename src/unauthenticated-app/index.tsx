@@ -9,7 +9,7 @@ import right from "assets/right.svg";
 import { useDocumentTitle } from "utils";
 import { ErrorBox } from "components/lib";
 
-export default () => {
+export default function UnauthenticatedApp() {
   const [isRegister, setIsRegister] = useState(false);
   // error变量是子组件改变父组件中变量的例子。onError属性绑定了setError方法传到了子组件
   const [error, setError] = useState<Error | null>(null);
@@ -33,7 +33,7 @@ export default () => {
       </ShadowCard>
     </Container>
   );
-};
+}
 
 const Title = styled.h2`
   margin-bottom: 2.4rem;

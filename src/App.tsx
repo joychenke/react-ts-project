@@ -9,6 +9,8 @@ import "./App.css";
 const AuthenticatedApp = React.lazy(() => import("authenticated-app"));
 const UnauthenticatedApp = React.lazy(() => import("unauthenticated-app"));
 
+// npm run build --profiler  在生产环境中，使用profiler
+
 // 根据是否有user属性，来判断展示登录页面还是注册页面
 function App() {
   const { user } = useAuth();
